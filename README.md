@@ -7,7 +7,7 @@
 
 Sign up with Cloudflare, and click the button below to start deploying.
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/a-franca/toot-worker)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/andrefcodes/toot-worker)
 
 Alternatively, you can clone the project and run [`wrangler deploy`](https://developers.cloudflare.com/workers/wrangler/commands/#deploy) locally.
 
@@ -54,4 +54,4 @@ Go back to the toot-worker service page on the Cloudflare dashboard, select Sett
 
 ## License
 
-This project is distributed under the terms of both the MIT license and the Apache License (Version 2.0). See [LICENSE-MIT](https://github.com/a-franca/toot-worker/blob/main/LICENSE-MIT) and [LICENSE-APACHE](https://github.com/a-franca/toot-worker/blob/main/LICENSE-APACHE) for details.
+This project is distributed under the terms of both the MIT license and the Apache License (Version 2.0). See [LICENSE-MIT](https://github.com/andrefcodes/toot-worker/blob/main/LICENSE-MIT) and [LICENSE-APACHE](https://github.com/andrefcodes/toot-worker/blob/main/LICENSE-APACHE) for details.
