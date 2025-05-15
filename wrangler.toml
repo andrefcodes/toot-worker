@@ -1,9 +1,9 @@
 name = "toot-worker"
 main = "main.js"
-compatibility_date = "2024-11-20"
+compatibility_date = "2025-05-14"
 
 kv_namespaces = [
-  { binding = "TOOTWORKER_KV", id = "c2a155bb63de4db79e5465af9e8bdf40" }
+  { binding = "TOOTWORKER_KV", id = "add your id here" }
 ]
 
 [observability.logs]
