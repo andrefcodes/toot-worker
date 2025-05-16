@@ -2,6 +2,7 @@
 
 **Toot-Worker** is a serverless application that automatically posts new articles from your RSS feed to your Mastodon account. It runs on Cloudflare Workers.
 
+> This application only works with the rss protocol.
 
 ### Step 1. Deploy this project to Cloudflare Workers
 
