@@ -29,19 +29,19 @@
 	/**
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-	 */
-	// "vars": { "MY_VARIABLE": "production_value" },
+	 * "vars": { "MY_VARIABLE": "production_value" },
+	*/
+	
+	//"vars": {
+	//	"RSS_FEED_URL": "your rss feed url here",
+	//	"INSTANCE_URL": "your instance url here",
+	//	"VISIBILITY": "public" // "unlisted", "private", or "public"
+	//},
 
-	"vars": {
-		"RSS_FEED_URL": "your rss feed url here",
-		"INSTANCE_URL": "your instance url here",
-		"VISIBILITY": "public" // "unlisted", "private", or "public"
-	},
-
-	// Scheduled triggers
-	"triggers": {
-		"crons": ["*/30 * * * *"] // Runs every 30 minutes
-	}
+	// Scheduled triggers - Don´t Uncomment this line.
+	//"triggers": {
+	//	"crons": ["*/30 * * * *"] // Runs every 30 minutes
+	//}
 
 	/**
 	 * Smart Placement
