@@ -221,6 +221,7 @@ function decodeHtmlEntities(str) {
               .replace(/&amp;/g, "&")
               .replace(/&quot;/g, "\"")
               .replace(/&#39;/g, "'")
+              .replace(/&#37;/g, "%")
               .replace(/&rsquo;/g, "’")  
               .replace(/&lsquo;/g, "‘") 
               .replace(/&ldquo;/g, "“") 
@@ -232,8 +233,6 @@ function decodeHtmlEntities(str) {
               .replace(/&euro;/g, "€")  
               .replace(/&pound;/g, "£")  
               .replace(/&yen;/g, "¥")
-              .replace(/&times;/g, "×")
-              .replace(/&divide;/g, "÷")
               .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))  // Decodes numeric character references
               .replace(/&#x([a-fA-F0-9]+);/g, (match, hex) => String.fromCharCode(parseInt(hex, 16))); // Decodes hex character references
 }
