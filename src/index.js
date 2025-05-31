@@ -64,10 +64,10 @@ async function fetchAllPosts(rssFeedUrl) {
         // Get the RSS feed as text
         const rssText = await response.text();
 
-        // Parse the text manually using string manipulation
+        // Get all <item> blocks from the RSS XML.
         const items = extractElements(rssText, "item");
 
-        // Map items to objects
+        // Map <description>, <link>, and <pubDate> items
         return items.map((item) => {
             const descriptionHtml = extractElementValue(item, "description") || "";
             const link = extractElementValue(item, "link") || "";
@@ -184,7 +184,7 @@ function isValidUrl(url) {
     }
 }
 
-// Extracts multiple occurrences of an XML element.
+// Extracts gets all <item> blocks from the RSS XML.
 function extractElements(xml, tagName) {
     const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)</${tagName}>`, "gi");
     const matches = [];
@@ -195,7 +195,7 @@ function extractElements(xml, tagName) {
     return matches;
 }
 
-// Extracts the value of the first occurrence of an XML element within a string.
+// Extracts the content of a given <tag> (e.g., <description>, <link>, <pubDate>)
 function extractElementValue(xml, tagName) {
     const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)</${tagName}>`, "i");
     const match = xml.match(regex);
@@ -204,18 +204,17 @@ function extractElementValue(xml, tagName) {
 
 // HTML Conversion into plaintext
 function convertHtmlToText(html) {
-    // Decode HTML entities
     const decodedHtml = decodeHtmlEntities(html);
 
     return decodedHtml
         .replace(/<\/?(?:p|div|br)[^>]*>/g, "\n") // Replace block elements with newlines
-        .replace(/<a[^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/gi, "$2 ($1)") // Convert <a> to "text (URL)"
-        .replace(/<img[^>]*alt="([^"]*)"[^>]*src="([^"]+)"[^>]*>/gi, "[$1] ($2)") // Convert <img> to "[alt] (URL)"
+        .replace(/<a[^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/gi, "[$2]($1)") // Convert <a> to "[text](URL)"
+        .replace(/<img[^>]*alt="([^"]*)"[^>]*src="([^"]+)"[^>]*>/gi, "[$1]($2)") // Convert <img> to "[alt](URL)"
         .replace(/<[^>]+>/g, "") // Strip all other HTML tags
-        .trim();
+        .trim(); // Remove leading/trailing whitespace
 }
 
-// Decodes HTML entities in a string.
+// This function is used by convertHtmlToText to ensure special characters are displayed correctly.
 function decodeHtmlEntities(str) {
     return str.replace(/&lt;/g, "<")
               .replace(/&gt;/g, ">")
@@ -235,8 +234,8 @@ function decodeHtmlEntities(str) {
               .replace(/&yen;/g, "¥")
               .replace(/&times;/g, "×")
               .replace(/&divide;/g, "÷")
-              .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))  // Decoded numeric character references
-              .replace(/&#x([a-fA-F0-9]+);/g, (match, hex) => String.fromCharCode(parseInt(hex, 16))); // Decoded hex character references
+              .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))  // Decodes numeric character references
+              .replace(/&#x([a-fA-F0-9]+);/g, (match, hex) => String.fromCharCode(parseInt(hex, 16))); // Decodes hex character references
 }
 
 //Cron Event Handlers
