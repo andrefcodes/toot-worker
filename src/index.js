@@ -92,30 +92,40 @@ async function fetchAllPosts(rssFeedUrl) {
 async function processPostsRecursively(posts, env) {
     const { TOOTWORKER_KV, MASTODON_INSTANCE, ACCESS_TOKEN, VISIBILITY } = env;
 
-    // Filter posts that are within the last 30 minutes
-    const nowUTC = new Date();
-    const thirtyMinutesAgoUTC = new Date(nowUTC - 30 * 60 * 1000);
+    // Get the last published link from KV
+    let lastPublishedLink = await TOOTWORKER_KV.get(LAST_POST_KEY);
 
-    for (const post of posts) {
+    // If no post has been published yet, publish only the newest post
+    if (!lastPublishedLink) {
+        const newestPost = posts[0];
+        if (newestPost) {
+            try {
+                console.log(`Publishing newest post: ${newestPost.link}`);
+                await publishToMastodon(newestPost.description, MASTODON_INSTANCE, ACCESS_TOKEN, VISIBILITY);
+                await savePublishedPost(newestPost.link, TOOTWORKER_KV);
+                console.log(`Post published and saved successfully`);
+            } catch (error) {
+                console.error(`Error processing post`, error);
+            }
+        }
+        return;
+    }
+
+    // Find the index of the last published post
+    const lastIndex = posts.findIndex(post => post.link === lastPublishedLink);
+
+    // All posts before lastIndex are newer than the last published post
+    // (since RSS is sorted most recent first)
+    const newPosts = lastIndex === -1 ? [] : posts.slice(0, lastIndex);
+
+    // Publish from oldest to newest
+    for (let i = newPosts.length - 1; i >= 0; i--) {
+        const post = newPosts[i];
         try {
-            // Skip posts older than 30 minutes
-            if (post.pubDateUTC < thirtyMinutesAgoUTC) {
-                continue;
-            }
-            
-            // Skip posts that have already been published
-            if (await isPostAlreadyPublished(post.link, TOOTWORKER_KV)) {
-                continue;
-            }
-
-            // Publish the post to Mastodon
             console.log(`Publishing post: ${post.link}`);
             await publishToMastodon(post.description, MASTODON_INSTANCE, ACCESS_TOKEN, VISIBILITY);
-
-            // Mark the post as published
             await savePublishedPost(post.link, TOOTWORKER_KV);
             console.log(`Post published and saved successfully`);
-
         } catch (error) {
             console.error(`Error processing post`, error);
         }
